@@ -42,15 +42,7 @@ RUN apt-get -y install libpcap0.8-dev
 # Ignores camera_control_msgs as it is already situated inside the the package.
 #RUN rosdep install --from-paths rdv_basler_driver/ --ignore-src rdv_basler_driver/camera_control_msgs/ -y
 
-# Install docker-compose
-RUN curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
-    && chmod +x /usr/local/bin/docker-compose
-RUN apt-get -yq install docker.io
-
 # Build catkin_simple and gtsam
-RUN mkdir -p $JENKINS_HOME/catkin_rdv/src
-RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash; cd $JENKINS_HOME/catkin_rdv/src; git clone https://github.com/catkin/catkin_simple.git; cd ..; catkin_make;"
-RUN /bin/bash -c "cd $JENKINS_HOME/catkin_rdv/src; git clone https://github.com/ethz-asl/gtsam_catkin.git; cd gtsam_catkin; git checkout 4b61d6862b2319367e25f85d1149271063fc2bcd; cd ../..; source /opt/ros/kinetic/setup.bash; catkin_make"
-
-
-
+RUN mkdir -p /catkin_rdv/src
+RUN /bin/bash -c "source /opt/ros/kinetic/setup.bash; cd /catkin_rdv/src; git clone https://github.com/catkin/catkin_simple.git; cd ..; catkin_make;"
+RUN /bin/bash -c "cd /catkin_rdv/src; git clone https://github.com/ethz-asl/gtsam_catkin.git; cd gtsam_catkin; git checkout 4b61d6862b2319367e25f85d1149271063fc2bcd; cd ../..; source /opt/ros/kinetic/setup.bash; catkin_make"
