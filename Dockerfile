@@ -34,3 +34,13 @@ RUN apt-get update && apt-get -q -y install lsb-core apt-utils git ssh && apt-ge
 RUN rm /etc/ros/rosdep/sources.list.d/20-default.list
 RUN rosdep init
 RUN rosdep update
+
+# Install qpOASES
+RUN /bin/bash -c "cd ~/; git clone https://github.com/coin-or/qpOASES.git; cd qpOASES; git checkout origin/stable/3.2; cmake .; make; sudo cp -r include/* /usr/local/include/; sudo cp -r libs/libqpOASES.a /usr/local/lib/"
+
+# Install new gcc
+RUN /bin/bash -c "add-apt-repository ppa:ubuntu-toolchain-r/test; apt update; apt install  g++-7 -y;"
+
+RUN groupadd wheel -g 998 && useradd -u 1000 -g 998 -m -N ohana
+RUN /bin/bash -c 'chown -R 1000:998 /catkin_rdv'
+USER ohana
